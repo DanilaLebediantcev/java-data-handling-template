@@ -1,8 +1,11 @@
 package com.epam.izh.rd.online.service;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SimpleDateService implements DateService {
 
@@ -14,7 +17,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            return localDate.format(dateFormat);
+        //return localDate.getDayOfMonth()+"-"+localDate.getMonthValue()+"-"+localDate.getYear();
     }
 
     /**
@@ -25,7 +30,8 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(string,dateTimeFormatter);
     }
 
     /**
@@ -37,7 +43,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +53,16 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        LocalDateTime date = LocalDateTime.now();
+        boolean leapYear = false;
+        while (leapYear){
+            if ((date.getYear() % 400 == 0) || ((date.getYear() % 4 == 0) && (date.getYear() % 100 != 0))) {
+                leapYear = true;
+            } else {
+                date.plusYears(1);
+            }
+        }
+        return date.getYear();
     }
 
     /**
@@ -57,7 +72,10 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        Calendar calendar = new GregorianCalendar(year+1,0,1);
+        Calendar calendar1 = new GregorianCalendar(year,0,1);
+
+        return ((calendar.getTime()).getTime()- (calendar1.getTime()).getTime())/1000;
     }
 
 
